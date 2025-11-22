@@ -59,33 +59,3 @@ jobs:
           soft_fail: true
           quiet: true
           download_external_modules: false
-  semver:
-    name: "Set code version tag"
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-    needs:
-      - linters
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v5
-        if: github.event_name == 'pull_request'
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-      - name: Check out code
-        uses: actions/checkout@v5
-        if: github.event_name == 'push'
-        with:
-          fetch-depth: 0
-      - name: Set application version
-        id: set_version
-        uses: kvendingoldo/git-flow-action@v2.2.0
-        with:
-          enable_github_release: true
-          auto_release_branches: main
-          tag_prefix_release: "v"
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
